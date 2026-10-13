@@ -214,15 +214,18 @@ export default function App() {
         <Confirmation booking={confirmation} onReset={bookAnother} />
       ) : (
         <main className={showBar ? "shell has-bar" : "shell"} id="booking">
+          <section className="hero">
+            <div className="hero-copy">
+              <p className="eyebrow">Home cleaning</p>
+              <h1>See the price, then pick the day.</h1>
+              <p className="lede">The calendar shows the full visit price for the clean and home you choose.</p>
+            </div>
+          </section>
+          {offline ? (
+            <p className="offline">The booking desk is reconnecting. You can still look through prices.</p>
+          ) : null}
           <div className="layout">
             <div className="chooser">
-              <div className="intro">
-                <h1>See the price, then pick the day.</h1>
-                <p className="lede">The calendar shows the full visit price for the clean and home you choose.</p>
-                {offline ? (
-                  <p className="offline">The booking desk is reconnecting. You can still look through prices.</p>
-                ) : null}
-              </div>
 
               <section className="picker">
                 <h2 className="section-label">Kind of clean</h2>

@@ -7,17 +7,21 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const dataFile = path.join(__dirname, "data", "bookings.json");
 const uri = process.env.MONGODB_URI?.trim();
 
-let collection;
+let pending;
 
-async function mongo() {
-  if (!collection) {
-    const client = new MongoClient(uri);
+function mongo() {
+  pending ??= (async () => {
+    const client = new MongoClient(uri, { serverSelectionTimeoutMS: 10000 });
     await client.connect();
-    collection = client.db(process.env.MONGODB_DB || "linen").collection("bookings");
+    const collection = client.db(process.env.MONGODB_DB || "linen").collection("bookings");
     await collection.createIndex({ reference: 1 }, { unique: true });
     await collection.createIndex({ date: 1, time: 1 }, { unique: true });
-  }
-  return collection;
+    return collection;
+  })().catch((error) => {
+    pending = undefined;
+    throw error;
+  });
+  return pending;
 }
 
 async function readFile() {

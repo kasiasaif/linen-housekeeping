@@ -158,8 +158,12 @@ app.get("/api/health", (_req, res) => {
 });
 
 app.get("/api/availability", async (_req, res) => {
-  const bookings = await readBookings();
-  res.json({ taken: takenMap(bookings) });
+  try {
+    res.json({ taken: takenMap(await readBookings()) });
+  } catch (error) {
+    console.error(error);
+    res.status(503).json({ error: "We couldn't load the calendar. Please try again." });
+  }
 });
 
 app.post("/api/bookings", async (req, res) => {
@@ -200,7 +204,9 @@ app.use((_req, res) => {
   res.status(404).json({ error: "Not found" });
 });
 
-await connectStore();
+connectStore().catch((error) => {
+  console.error(`MongoDB is not reachable yet: ${error.message}`);
+});
 
 app.listen(port, () => {
   console.log(`Linen booking API on http://localhost:${port}`);

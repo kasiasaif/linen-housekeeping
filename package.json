@@ -7,8 +7,8 @@
     "node": ">=22.18.0"
   },
   "scripts": {
-    "dev": "concurrently -n web,api \"vite\" \"node --watch-path=server/index.js --watch-path=server/email.js --watch-path=src server/index.js\"",
-    "server": "node --watch-path=server/index.js --watch-path=server/email.js --watch-path=src server/index.js",
+    "dev": "concurrently -n web,api \"vite\" \"node --watch-path=server/index.js --watch-path=server/email.js --watch-path=server/store.js --watch-path=src server/index.js\"",
+    "server": "node --watch-path=server/index.js --watch-path=server/email.js --watch-path=server/store.js --watch-path=src server/index.js",
     "start": "node server/index.js",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
@@ -17,6 +17,7 @@
   "dependencies": {
     "dotenv": "^18.0.7",
     "express": "^4.22.3",
+    "mongodb": "^7.7.0",
     "nodemailer": "^10.1.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"

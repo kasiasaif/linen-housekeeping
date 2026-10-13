@@ -1,6 +1,5 @@
 import "dotenv/config";
 import express from "express";
-import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -18,9 +17,9 @@ import {
   takenMap,
 } from "../src/lib/pricing.ts";
 import { emailIsConfigured, sendConfirmation } from "./email.js";
+import { addBooking, connectStore, readBookings, usingDatabase } from "./store.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const dataFile = path.join(__dirname, "data", "bookings.json");
 const dist = path.resolve(__dirname, "../dist");
 const port = Number(process.env.PORT || 3001);
 
@@ -33,19 +32,6 @@ function withBookings(task) {
     () => undefined,
   );
   return run;
-}
-
-async function readBookings() {
-  try {
-    return JSON.parse(await fs.readFile(dataFile, "utf8"));
-  } catch {
-    return [];
-  }
-}
-
-async function writeBookings(bookings) {
-  await fs.mkdir(path.dirname(dataFile), { recursive: true });
-  await fs.writeFile(dataFile, JSON.stringify(bookings, null, 2));
 }
 
 function text(value, max) {
@@ -189,8 +175,7 @@ app.post("/api/bookings", async (req, res) => {
       const draft = { ...parsed.value, reference, createdAt: new Date().toISOString() };
       const delivery = await sendConfirmation(draft);
       const booking = { ...draft, ...delivery };
-      bookings.push(booking);
-      await writeBookings(bookings);
+      await addBooking(booking);
       console.log(
         `Booked ${reference} for ${booking.email} — email ${booking.emailStatus}`,
       );
@@ -215,7 +200,10 @@ app.use((_req, res) => {
   res.status(404).json({ error: "Not found" });
 });
 
+await connectStore();
+
 app.listen(port, () => {
   console.log(`Linen booking API on http://localhost:${port}`);
+  console.log(usingDatabase ? "Bookings are saved in MongoDB." : "Bookings are saved in server/data/bookings.json. Add MONGODB_URI to keep them in MongoDB.");
   console.log(emailIsConfigured() ? "Brevo is ready. Confirmations send from hello@linenhousekeeping.co.uk." : "Brevo is not connected yet. Add the API key to .env and bookings will email the customer.");
 });

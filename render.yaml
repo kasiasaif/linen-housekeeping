@@ -18,3 +18,5 @@ services:
         value: kasia.saif@gmail.com
       - key: BREVO_API_KEY
         sync: false
+      - key: MONGODB_URI
+        sync: false

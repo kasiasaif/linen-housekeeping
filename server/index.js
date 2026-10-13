@@ -154,7 +154,7 @@ const app = express();
 app.use(express.json({ limit: "20kb" }));
 
 app.get("/api/health", (_req, res) => {
-  res.json({ ok: true, email: emailIsConfigured() });
+  res.json({ ok: true, email: emailIsConfigured(), database: usingDatabase });
 });
 
 app.get("/api/availability", async (_req, res) => {

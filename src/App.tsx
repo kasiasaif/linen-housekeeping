@@ -203,8 +203,11 @@ export default function App() {
       <header className="header">
         <div className="header-inner">
           <button type="button" className="wordmark" onClick={bookAnother}>
-            Linen
-            <span>Housekeeping</span>
+            <img className="logo" src="/favicon.svg" alt="" width="40" height="40" />
+            <span className="wordmark-text">
+              Linen
+              <span>Housekeeping</span>
+            </span>
           </button>
           <p className="header-note">By appointment</p>
         </div>

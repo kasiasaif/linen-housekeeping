@@ -12,7 +12,7 @@ function configured() {
   return Boolean(process.env.BREVO_API_KEY && process.env.BREVO_SENDER_EMAIL);
 }
 
-const logoUrl = "https://files.catbox.moe/ofx0x5.png";
+const logoUrl = "https://www.linenhousekeeping.co.uk/email-logo.png";
 
 function firstName(name) {
   return name.trim().split(/\s+/)[0] || name;

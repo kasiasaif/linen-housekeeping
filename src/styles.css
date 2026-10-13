@@ -636,7 +636,7 @@ a.button {
 }
 
 @media (hover: hover) {
-  .day:not(:disabled):hover { background: #fff; }
+  .day:not(:disabled):not([aria-pressed="true"]):hover { background: #fff; }
   .service:not([aria-pressed="true"]):hover,
   .choice:not([aria-pressed="true"]):hover,
   .slot:not([aria-pressed="true"]):hover { border-color: #aebdb6; }

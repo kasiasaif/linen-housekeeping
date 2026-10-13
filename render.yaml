@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: linen-housekeeping
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 22.20.0
+      - key: BREVO_SENDER_EMAIL
+        value: hello@linenhousekeeping.co.uk
+      - key: BREVO_SENDER_NAME
+        value: Linen Housekeeping
+      - key: BREVO_REPLY_TO
+        value: hello@linenhousekeeping.co.uk
+      - key: NOTIFY_EMAIL
+        value: kasia.saif@gmail.com
+      - key: BREVO_API_KEY
+        sync: false
